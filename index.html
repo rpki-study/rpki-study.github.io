@@ -1,13 +1,131 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Página de prueba<title>
-</head>
-<body>
-  <h1>Hola amiguitos!</h1>
-  <footer>gpuma 2017</footer>
-</body>
+<html lang="en">
+  <head>
+	<meta name="generator" content="Hugo 0.55.6" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <title>StartTLS Scanner</title>
+    <base href="http://proxy-research.com">
+    
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,700" rel="stylesheet">
+    
+    
+    
+    
+    
+
+    <noscript>
+      <link rel="stylesheet" type="text/css" href="./css/noscript.css">
+    </noscript>
+  </head>
+  <body class="container">
+    <nav class="container-fluid navbar navbar-default">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar">&nbsp;</span>
+    <span class="icon-bar">&nbsp;</span>
+    <span class="icon-bar">&nbsp;</span>
+    </button>
+    <a class="navbar-brand" href="#">STARTTLS</a>
+  </div>
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/contact/">Contact</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+    </ul>
+  </div>
+</nav>
+
+    <header class="page-header">
+
+</header>
+
+    
+    <noscript>
+  <div class="alert alert-warning" role="alert">
+    <strong>JavaScript disabled!</strong> This page requires JavaScript, you might not be able to access all content with JavaScript disabled.
+  </div>
+</noscript>
+
+    <main class="container-fluid">
+      
+
+<h1 id="welcome-to-starttls-scanner">Welcome to STARTTLS Scanner.</h1>
+
+<p>StartTLS Scanner is a project of <a href="https://cs.rit.edu/">Rochester Institute of Technology</a>. We currently collect certificates served at SMTP servers that support <a href="https://tools.ietf.org/html/rfc3501">STARTTLS</a> and <a href="https://tools.ietf.org/html/rfc6698">DANE</a>.</p>
+
+<p>Our goal is to perform a comprehensive active measurement of the DANE-supporting mail servers to track and analyze the usage and their deployment.</p>
+
+<h1 id="problem-reporting">Problem Reporting</h1>
+
+<p>If you are a mail server operator and you believe that your mail servers may be experiencing problems due to our measurements, please consult the information below on what you can expect to see from us, how you can contact us, and as a last resort how you can block our traffic.</p>
+
+<p>We thank you in advance for working with us to resolve any issues, and apologize in advance if we have inadvertently caused any problems through our measurement.</p>
+
+<h2 id="what-can-mail-server-operators-expect">What can mail server operators expect?</h2>
+
+<h3 id="mail-servers">Mail servers</h3>
+
+<p>You can expect that our measurement system will collect a single certificate using a STARTTLS command every hour from 5 or 6 IP addresses. We do not send any emails to the mail servers, but just fetch the certificate.</p>
+
+<h3 id="dns-authoritative-servers">DNS authoritative servers</h3>
+
+<p>You can expect that our measurement system will send a single DNS query (TLSA record lookup) every hour from one IP address to fetch TLSA records.</p>
+
+<h2 id="what-should-i-do-if-the-measurement-impacts-on-my-infrastructure">What should I do if the measurement impacts on my infrastructure?</h2>
+
+<p>If you think our measurement is impacting your infrastructure adversely, please contact us so we can try to resolve the problem. We would be highly appreciated if you could send us the following information:</p>
+
+<ul>
+<li>The name of your organization and an email address,</li>
+<li>The DNS hostname(s) of the affected name server(s),</li>
+<li>The MX record(s) of the affected mail server(s),</li>
+<li>A brief description of the impact,</li>
+<li>A date and time on which you (first) experienced problems you think may be caused by our measurement,</li>
+<li>The IP address(es) or block from which you are receiving problmatic traffic.</li>
+</ul>
+
+<p>Upon receiving the information above, we will stop sending any queries and fetching certificates from the DNS servers and mail servers.</p>
+
+<h3 id="response-time">Response time</h3>
+
+<p>We are in the EDT (Eastern Time, UTC-4). We try to answer any request concerning problems within one business day. If you need our urgent attention, please include &ldquo;[URGENT]&rdquo; in the subject line of any e-mail you send us.</p>
+
+    </main>
+    <footer class="container-fluid page-footer" style="display: flex; align-items: center">
+</footer>
+
+    
+<script type="text/javascript">
+var sc_project=11603023; 
+var sc_invisible=1; 
+var sc_security="a906280a"; 
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="http://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="//c.statcounter.com/11603023/0/a906280a/1/" alt="Web
+Analytics"></a></div></noscript>
+
+
+    
+    <script src="js/jquery.1.12.4.min.js"></script>
+    
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+  </body>
 </html>
-
-
