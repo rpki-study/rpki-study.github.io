@@ -58,6 +58,36 @@
     <main class="container-fluid">
       
 
+<div class="jumbotron">
+      <div class="container">
+          <h2 align='right'>RPKI is Coming of Age: <br>A Longitudinal Study of RPKI Deployment and Invalid Route Origins</h2>
+        <h3 align='right'>
+            <a href="https://taejoong.github.io">Taejoong Chung<sup>§</sup></a>,
+            Emile Aben<sup>†</sup>,
+            Tim Bruijnzeels<sup>‡</sup>,
+            <a href="https://inet.tu-berlin.de/~balakrishnan/">Balakrishnan Chandrasekaran<sup>-</sup>,</a><br>
+            <a href="http://david.choffnes.com">David Choffnes<sup>*</sup></a>,
+            <a href="http://www.cs.umd.edu/~dml/">Dave Levin<sup>+</sup></a>,
+            <a href="http://www.cs.cmu.edu/~bmm/">Bruce Maggs°<sup>•</sup></a>,
+            <a href="http://www.ccs.neu.edu/home/amislove/">Alan Mislove<sup>*</sup></a>,<br>
+            <a href="https://wwwhome.ewi.utwente.nl/~rijswijkrm/">Roland van Rijswijk-Deij<sup>‡±</sup></a>,
+            <a href="http://www.cs.northwestern.edu/~jpr123/">John Rula<sup>•</sup></a>,
+            <a href="https://crypto.dance/">Nick Sullivan<sup>※</sup></a>
+        </h3>
+        <h5 align='right'>
+            <sup>§</sup>RIT,
+            <sup>†</sup>RIPE NCC,
+            <sup>‡</sup>NLNetLabs,
+            <sup>±</sup>University of Twente,
+            <sup>-</sup>Max Planck Institute for Informatics,
+            <sup>*</sup>Northeastern University,<br>
+            <sup>+</sup>University of Maryland,
+            <sup>°</sup>Duke University,
+            <sup>•</sup>Akamai Technologies,
+            <sup>※</sup>Cloudflare
+      </div>
+    </div>
+
 <h1 id="about-this-study">About This Study</h1>
 
 <p>Despite its critical role in Internet connectivity, BGP remains highly vulnerable to attacks such as prefix hijacking, where an Autonomous System (AS) announces routes for IP space it does not control. To address this issue, the Resource Public Key Infrastructure (RPKI) was developed starting in 2008, resulting in deployment in 2011. This paper performs the first comprehensive, longitudinal study of the deployment and quality of RPKI. We use a unique dataset containing all RPKI Route Origin Authorizations (ROAs) from the moment RPKI was first deployed, more than 8 years ago. We combine this dataset with BGP announcements from more than 3,300 BGP collectors worldwide. Our analysis shows the after a gradual start, RPKI has seen a rapid increase in adoption over the past two years. We also show that although misconfigurations were rampant when RPKI was first deployed (causing many announcements to appear as RPKI invalid) they are quite rare today. We develop a taxonomy of invalid RPKI announcements, then quantify their prevalence. We further identify suspicious announcements indicative of prefix hijacking and present case studies of likely hijacks. Overall, we conclude that while misconfigurations do occur, RPKI is “ready for the big screen,” and routing security can be increased by dropping invalid announcements.</p>
