@@ -1,27 +1,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://rpki-study.github.io/</loc>
+    <loc>https://rpki-study.github.io/</loc>
     <lastmod>2018-05-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rpki-study.github.io/rpki-archive/</loc>
+    <loc>https://rpki-study.github.io/rpki-archive/</loc>
     <lastmod>2018-05-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rpki-study.github.io/contact/</loc>
+    <loc>https://rpki-study.github.io/contact/</loc>
     <lastmod>2018-05-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rpki-study.github.io/categories/</loc>
+    <loc>https://rpki-study.github.io/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://rpki-study.github.io/tags/</loc>
+    <loc>https://rpki-study.github.io/tags/</loc>
     <priority>0</priority>
   </url>
   
