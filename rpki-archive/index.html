@@ -38,6 +38,7 @@
     <ul class="nav navbar-nav">
         <li><a href="/">Home</a></li>
         <li class="active"><a href="/rpki-archive/">RPKI Archive</a></li>
+        <li><a href="/analysis-code/">Analysis Code</a></li>
         <li><a href="/contact/">Contact</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
@@ -69,7 +70,12 @@
 
 <p>The root of the repositories contains a number of directories, each of which have data for (part of) the RPKI data for a specific Regional Internet Registry (RIR). The table below lists these directories and their specifics:</p>
 
-<table>
+
+
+
+
+
+<table class="table table-dark table-striped table-bordered">
 <thead>
 <tr>
 <th>Directory</th>
@@ -158,8 +164,12 @@
 </tr>
 </tbody>
 </table>
+<style>
+table, th, td {
+  text-align: center;
+}
+</style>
 
-<p><br></p>
 
 <p><sup>1</sup> The APNIC repository was split up into a main repository (<code>-iana</code>) and subrepositories for the other RIRs, where these specific subrepositories contain those prefixes the covering <code>/8</code> of which is allocated to another RIR in the IANA registry. This is an artefact resulting from the one-time desire to have the IPv4 &ldquo;<code>/8</code> majority&rdquo; prefixes in the IANA registry on each RIR&rsquo;s certificate. The RIRs would then sign certificates to each other for the small bits of early registration and transferred space out of such a <code>/8</code> that is registered at the other RIR. APNIC discontinued this split in 2018, and since then uses a single RPKI repository like the other RIRs do. To get the unified view for the APNIC repository over the period of the split, the various subrepositories should be merged into a single view. The Ziggy tool (more information below) does this automatically.</p>
 
