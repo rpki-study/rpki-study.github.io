@@ -60,24 +60,87 @@
 
 <h1 id="rpki-analysis-code-for-reproducibility-of-the-imc-19-paper">RPKI Analysis Code (for reproducibility of the IMC&rsquo;19 paper)</h1>
 
-<h2 id="disclaimer">Disclaimer</h2>
+<style>
+table, th { text-align: center;
+}
+</style>
 
-<h2 id="preliminary-steps">Preliminary Steps</h2>
-
-<h3 id="rpki-objects">RPKI Objects</h3>
+<h2 id="preliminary">Preliminary</h2>
 
 <ol>
-<li>Download all rpki historial objects</li>
-<li>preprosessing for spark (extract-ripe-rpki.py)</li>
-<li>produce vrps (and add meta information, produce-asn-ipprefix-ripe-new.py)
-NRO Stats</li>
+<li><p>To analyze validated BGP announcements, you first need to have two datasets: <a href="/rpki-archive">RPKI historical objects</a> and <a href="/rpki-archive/">public BGP datasets.</a></p></li>
+
+<li><p>Due to the massive size of the datasets (46 <em>billion</em> BGP announcements and 8-years RPKI objects), we strongly encourage you to use distributed cluster-computing framework (we used <a href="https://spark.apache.org/">Spark</a> for large-scale data processing. For your information, it took more than 3 days to verify all 46 billion BGP announcements with RPKI by utilizing ~700 cores and ~4 TB RAMs. )</p></li>
+
+<li><p>During the validation process, we also use two datasets to infer the relationship between an AS who originated the BGP announcement and an AS that actually owns the announced IP prefix (i.e., ASN in the ROA), and ISP and Country information from the ASN from <a href="http://www.caida.org/home/">CAIDA</a>: <a href="http://data.caida.org/datasets/as-organizations">as-organization</a>, <a href="http://data.caida.org/datasets/as-relationships/">as-relationship</a>.</p></li>
+
+<li><p>Lastly, we also used <a href="https://www.nro.net/about/rirs/statistics/">NRO (Number Resource Organization)</a> to infer who allocated and assigned the IP prefixes advertised through BGP.</p></li>
 </ol>
 
+<h2 id="summary-of-source-codes">Summary of source codes</h2>
+
+<p>Here, we provide following source codes. The instruction and usage of the source codes are explainedbelow.</p>
+
+
+
+
+
+
+<table class="table table-dark table-striped table-bordered">
+<thead>
+<tr>
+<th>filename</th>
+<th>Download</th>
+<th>Misc.</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>produce-vrps.py</code></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><code>akamai-data-pruning.py</code></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><code>spark-verify.py</code></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><code>analysis-codes.gz</code></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td><code>plotting-script.gz</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <style>
 table, th, td {
   text-align: center;
 }
 </style>
+
+
+<h2 id="reproducing-the-figures-in-the-imc-19-paper">Reproducing the figures in the IMC&rsquo;19 paper</h2>
+
+<h3 id="1-generate-validated-roa-payloads-vrps-from-roas">1. Generate Validated ROA Payloads (VRPs) from ROAs.</h3>
+
+<p>Among the historical RPKI objects, we specifically focus on ROAs to generate VRPs.
+A structure of ROA is defined at <a href="https://tools.ietf.org/html/rfc6482">RFC 6482</a>.
+The script <code>produce-vrps.py</code> will generate VRPs from each of the ROAs in the following format, which will be used to validate the IP prefixes from BGP announcements. (We used a python third-party library, <a href="https://github.com/dragonresearch/rpki.net">rpki.net</a>, to parse ROA objects.)</p>
 
 
 
@@ -151,12 +214,10 @@ table, th, td {
 </style>
 
 
-<h3 id="bgp-datasets">BGP Datasets</h3>
+<h3 id="2-obtain-daily-unique-bgp-prefixes-from-each-of-the-bgp-datasets">2. Obtain daily unique BGP prefixes from each of the BGP Datasets.</h3>
 
-<ol>
-<li>Download all public BGP datasets</li>
-<li>As they contain duplicate IP prefixes announcement and reduce it.. (akamai-daily-pruning.py)</li>
-</ol>
+<p>After obtaining BGP datasets, we should remove duplicate IP prefixes announcement to reduce the size of the datasets and to make validation process faster.
+The script, <code>akamai-data-pruning.py</code>, will remove duplicated entries and outputs in the following format:</p>
 
 
 
@@ -261,6 +322,205 @@ table, th, td {
 <td>&hellip;</td>
 <td>&hellip;</td>
 <td>&hellip;</td>
+</tr>
+</tbody>
+</table>
+<style>
+table, th, td {
+  text-align: center;
+}
+</style>
+
+
+<h3 id="3-validate-bgp-datasets-obtained-from-2-against-vrp-obtained-from-1">3. Validate BGP Datasets (obtained from 2) against VRP (obtained from 1).</h3>
+
+<p>Now you are ready to validate BGP announcements (obtained from 2) using VRPs (obtained from 1).
+When validating BGP announcements, we followed the following algorithm from RFC6811.<br />
+(For those who are interested in the details of how VRPs are used to verify BGP announcement, please refer <a href="https://tools.ietf.org/html/rfc6811">BGP Prefix Origin Validation (RFC6811)</a>)</p>
+
+<pre><code>   // This Pseudo-Code is an excerpt from RFC6811.
+
+   result = BGP_PFXV_STATE_NOT_FOUND;
+
+   //Iterate through all the Covering entries in the local VRP
+   //database, pfx_validate_table.
+   entry = next_lookup_result(pfx_validate_table, route_prefix);
+
+   while (entry != NULL) {
+     prefix_exists = TRUE;
+
+     if (route_prefix_length &lt;= entry-&gt;max_length) {
+       if (route_origin_as != NONE
+           &amp;&amp; entry-&gt;origin_as != 0
+           &amp;&amp; route_origin_as == entry-&gt;origin_as) {
+         result = BGP_PFXV_STATE_VALID;
+         return (result);
+       }
+     }
+     entry = next_lookup_result(pfx_validate_table, input.prefix);
+   }
+
+   //If one or more VRP entries Covered the route prefix, but
+   //none Matched, return &quot;Invalid&quot; validation state.
+   if (prefix_exists == TRUE) {
+     result = BGP_PFXV_STATE_INVALID;
+   }
+
+   return (result);
+</code></pre>
+
+<p>The source code, <code>spark-verify.py</code> produces the validated results with the following format (Please note that we used Spark cluster for a large-scale data processing):</p>
+
+
+
+
+
+
+<table class="table table-dark table-striped table-bordered">
+<thead>
+<tr>
+<th>time</th>
+<th>prefix-addr</th>
+<th>prefix-len</th>
+<th>origin</th>
+<th>origin-isp</th>
+<th>origin-country</th>
+<th>Verified Information<sup>1</sup></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>20181227</td>
+<td>99.108.0.0</td>
+<td>14</td>
+<td>7018</td>
+<td>AT&amp;T Services  Inc.</td>
+<td>US</td>
+<td>3,7018,AT&amp;T Services  Inc.,US,None,99.108.0.0/14-14</td>
+</tr>
+
+<tr>
+<td>20181227</td>
+<td>99.112.0.0</td>
+<td>12</td>
+<td>7018</td>
+<td>AT&amp;T Services  Inc.</td>
+<td>US</td>
+<td>3,7018,AT&amp;T Services  Inc.,US,None,99.112.0.0/12-12</td>
+</tr>
+
+<tr>
+<td>20181227</td>
+<td>99.192.128.0</td>
+<td>17</td>
+<td>27589</td>
+<td>MOJOHOST</td>
+<td>US</td>
+<td>3,27589,MOJOHOST,US,None,99.192.128.0/17-24</td>
+</tr>
+
+<tr>
+<td>20181227</td>
+<td>99.32.0.0</td>
+<td>12</td>
+<td>7018</td>
+<td>AT&amp;T Services  Inc.</td>
+<td>US</td>
+<td>3,7018,AT&amp;T Services  Inc.,US,None,99.32.0.0/12-12</td>
+</tr>
+</tbody>
+</table>
+<style>
+table, th, td {
+  text-align: center;
+}
+</style>
+
+
+<p><sup>1</sup> Verified information is a list of the validated result of a given BGP announcement from its covered ROA, which contains a list of (validation-index, ASN of the covered ROA, ISP of the covered ROA, country code of the covered ROA, relationship between the origin ASN of the BGP and ASN of the covered ROA, and covered IP prefix) tuples; the details of validation-index can be found in the source code.</p>
+
+<h3 id="4-analyze-validated-bgp-announcements">4. Analyze Validated BGP announcements</h3>
+
+<p>The <code>analysis-codes.gz</code> and <code>plotting-script.gz</code> contain three analysis scripts and 10 plotting scripts which generate the figures in the paper. The below table describes each of the functions in the code that generates the dataset and plotting gnuplot scripts.</p>
+
+
+
+
+
+
+<table class="table table-dark table-striped table-bordered">
+<thead>
+<tr>
+<th>file</th>
+<th>function</th>
+<th>figures in the paper</th>
+<th>gnuplot script</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>spark-rpki-object-validation.py</td>
+<td>runSparkROAsIPCnt, runSparkROAsIPPercentage, runSparkPercentageASesInROAs</td>
+<td>Figure 2</td>
+<td>num-vrps-as-ip-ipv4-byIRR.plot</td>
+</tr>
+
+<tr>
+<td>spark-analysis.py</td>
+<td>runSparkCalcRPKIEnabledAdv</td>
+<td>Figure 3</td>
+<td>percentage-rpki-enabled-adv-ipv4.plot</td>
+</tr>
+
+<tr>
+<td>spark-analysis.py</td>
+<td>runSparkValidationUniquePrefix, runSparkValidationUniquePrefixAllPrefix</td>
+<td>Figure 4, Figure 5</td>
+<td>percentage-rpki-uniq-prefix-asn-invalid-ipv4-merge.plot, percentage-rpki-uniq-prefix-asn-invalid-ipv4-focus.plot</td>
+</tr>
+
+<tr>
+<td>spark-analysis.py</td>
+<td>runSparkValidationUniquePrefix</td>
+<td>Figure 6</td>
+<td>num-rpki-uniq-prefix-asn-invalid-adv-reasoning-ipv4.plot</td>
+</tr>
+
+<tr>
+<td>spark-rpki-object-validation.py</td>
+<td>runSparkNumPrefixWithMaxlen</td>
+<td>Figure 7</td>
+<td>percentage-ipprefix-with-maxlen-ipv4.plot (a), percentage-rpki-uniq-prefix-asn-merge-adv-hasMaxLen-ipv4.plot (b)</td>
+</tr>
+
+<tr>
+<td>spark-analysis.py</td>
+<td>runSparkClassifyHijackingUniquePrefix</td>
+<td>Figure 8</td>
+<td>num-rpki-uniq-prefix-classify-hijack-ipv4.plot</td>
+</tr>
+
+<tr>
+<td>spark-analysis.py</td>
+<td>runSparkClassifyHijackingUniquePrefixDuration</td>
+<td>Figure 9</td>
+<td>cdf-num-attack-duration.plot</td>
+</tr>
+
+<tr>
+<td>spark-analysis.py</td>
+<td>runSparkClassifyHijackingUniquePrefix</td>
+<td>Figure 10</td>
+<td>percentage-rpki-uniq-prefix-asn-invalid-suspicious-ipv4.plot</td>
+</tr>
+
+<tr>
+<td>hijack-analysis.py</td>
+<td>getPairsOfAttack</td>
+<td>Figure 11, 12</td>
+<td>cdf-num-hijacked-ipv4-byAS, cdf-num-attacker-ipv4-byAS.plot</td>
 </tr>
 </tbody>
 </table>
