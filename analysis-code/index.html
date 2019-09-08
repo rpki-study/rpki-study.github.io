@@ -72,7 +72,7 @@ table, th { text-align: center;
 
 <li><p>Due to the massive size of the datasets (46 <em>billion</em> BGP announcements and 8-years RPKI objects), we strongly encourage you to use distributed cluster-computing framework (we used <a href="https://spark.apache.org/">Spark</a> for large-scale data processing. For your information, it took more than 3 days to verify all 46 billion BGP announcements with RPKI by utilizing ~700 cores and ~4 TB RAMs. )</p></li>
 
-<li><p>During the validation process, we also use two datasets to infer the relationship between an AS who originated the BGP announcement and an AS that actually owns the announced IP prefix (i.e., ASN in the ROA), and ISP and Country information from the ASN from <a href="http://www.caida.org/home/">CAIDA</a>: <a href="http://data.caida.org/datasets/as-organizations">as-organization</a>, <a href="http://data.caida.org/datasets/as-relationships/">as-relationship</a>.</p></li>
+<li><p>During the validation process, we also use two additional datasets to infer (1) the relationship between an AS who originated the BGP announcement and an AS that actually owns the announced IP prefix (i.e., ASN in the ROA), and (2) ISP and country information from the ASN from <a href="http://www.caida.org/home/">CAIDA</a>: <a href="http://data.caida.org/datasets/as-organizations">as-organization</a>, <a href="http://data.caida.org/datasets/as-relationships/">as-relationship</a>.</p></li>
 
 <li><p>Lastly, we also used <a href="https://www.nro.net/about/rirs/statistics/">NRO (Number Resource Organization)</a> to infer who allocated and assigned the IP prefixes advertised through BGP.</p></li>
 </ol>
@@ -216,8 +216,8 @@ table, th, td {
 
 <h3 id="2-obtain-daily-unique-bgp-prefixes-from-each-of-the-bgp-datasets">2. Obtain daily unique BGP prefixes from each of the BGP Datasets.</h3>
 
-<p>After obtaining BGP datasets, we should remove duplicate IP prefixes announcement to reduce the size of the datasets and to make validation process faster.
-The script, <code>akamai-data-pruning.py</code>, will remove duplicated entries and outputs in the following format:</p>
+<p>After obtaining BGP datasets, we need to remove duplicate IP prefixes announcement to reduce the size of the datasets and to make validation process faster.
+The script, <code>data-pruning.py</code>, removes duplicated entries and outputs in the following format:</p>
 
 
 
