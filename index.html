@@ -76,10 +76,10 @@
             <a href="https://crypto.dance/">Nick Sullivan<sup>※</sup></a>
         </h3>
         <h5 align='right'>
-            <sup>§</sup>RIT,
+            <sup>§</sup>Rochester Institute of Technology,
             <sup>†</sup>RIPE NCC,
             <sup>‡</sup>NLNetLabs,
-            <sup>±</sup>University of Twente,
+            <sup>±</sup>University of Twente,<br>
             <sup>-</sup>Max Planck Institute for Informatics,
             <sup>*</sup>Northeastern University,<br>
             <sup>+</sup>University of Maryland,
@@ -109,11 +109,16 @@
 
 <p>For these two datasets, <a href="/rpki-archive">RPKI Archive</a> describes the datasets and instruction.</p>
 
-<h2 id="2-bgp-updates">2. BGP Updates</h2>
+<h2 id="2-bgp-advertisements">2. BGP advertisements</h2>
 
 <p>In order to understand how ROAs affect routing table construction, we used three datasets:</p>
 
-<table>
+
+
+
+
+
+<table class="table table-dark table-striped table-bordered">
 <thead>
 <tr>
 <th>Source</th>
@@ -154,11 +159,17 @@
 </tr>
 </tbody>
 </table>
+<style>
+table, th, td {
+  text-align: center;
+}
+</style>
+
 
 <p><br>
 <sup>1</sup>Our Akamai dataset is provided under agreement with Akamai; unfortunately, we are not permitted to release this data.</p>
 
-<h2 id="3-analysis-source-codes">3. Analysis source codes</h2>
+<h2 id="3-analysis-and-plotting-source-codes">3. Analysis and plotting source codes</h2>
 
 <p>For reproducibility of the IMC’19 paper, we share the analysis codes and plotting scripts <a href="/analysis-code">here</a>.</p>
 
